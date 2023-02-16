@@ -28,19 +28,22 @@ const LoginUser = async (req, res) => {
     const user = await userModel.findByEmail(email);
 
     if (user.password !== password) {
-      return res.status(401).send('Invalid email or password');
+      return res.status(401).send("Invalid email or password");
     }
 
     const token = jwt.sign({ email: req.body.email }, process.env.TOKEN_KEY);
-    console.log(req.session); 
+    console.log(req.session);
+    // Set user data on res.locals
+    res.locals.user = user;
+    
     req.session.token = token;
 
     // Save the token in a cookie
-    res.cookie('token', token, {
+    res.cookie("token", token, {
       httpOnly: true,
-      sameSite: 'strict',
+      sameSite: "strict",
       maxAge: 60 * 60 * 1000, // 1 hour
-      secure: process.env.NODE_ENV === 'production'
+      secure: process.env.NODE_ENV === "production",
     });
     return res.redirect("/dashboard");
   } catch (err) {
