@@ -52,12 +52,12 @@ const LoginUser = async (req, res) => {
         }
       );
 
-      res.status(200).render("pages/index", { title: email });
+      res.status(200).render("pages/index", { title: req.body.email });
     } else {
       res.status(400).render("pages/index", { title: "Invalid!"})
     }
   } catch (err) {
-    console.log(err);
+    res.status(400).render("pages/index", { title: "Invalid!"})
   }
 };
 

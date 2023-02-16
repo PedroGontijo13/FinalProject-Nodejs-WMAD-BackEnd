@@ -17,7 +17,9 @@ router.get("/login", (req, res) => {
 });
 
 // Login user
-router.post("/login", userController.LoginUser);
+router.post("/login", (req, res) => {
+  userController.LoginUser(req, res)
+});
 
 router.post("/", (req, res) => {
   userController.createUser(req);

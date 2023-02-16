@@ -45,7 +45,7 @@ const getUserByUsername = async (username) => {
     FROM users
     WHERE username = $1
   `;
-  const result = await pool.query(query, [username]);
+  const result = await client.query(query, [username]);
   return result.rows[0];
 };
 
