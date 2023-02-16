@@ -39,15 +39,32 @@ const getUsers = (callback) => {
   });
 };
 
-const getUserByUsername = async (username) => {
-  const query = `
-    SELECT *
-    FROM users
-    WHERE username = $1
-  `;
-  const result = await client.query(query, [username]);
-  return result.rows[0];
-};
+function getUserById(id) {
+  const query = {
+    text: 'SELECT * FROM users WHERE id = $1',
+    values: [id]
+  };
+
+  return client.query(query)
+    .then(res => {
+      if (res.rows.length === 0) {
+        throw new Error('User not found');
+      }
+      return res.rows[0];
+    });
+}
+
+
+const findByEmail = async (email) => {
+  const query = {
+    text: 'SELECT * FROM users WHERE email = $1',
+    values: [email],
+  };
+
+  const { rows } = await client.query(query);
+
+  return rows[0];
+}
 
 const createUser = (user, callback) => {
   const query =
@@ -63,4 +80,4 @@ const createUser = (user, callback) => {
   });
 };
 
-export default { getUsers, createUsersTable, createUser, getUserByUsername };
+export default { getUsers, createUsersTable, createUser, getUserById, findByEmail };

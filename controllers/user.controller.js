@@ -1,6 +1,5 @@
 import userModel from "../models/user.model.js";
-import client from "../config/database.js";
-import jwt from 'jsonwebtoken'
+import jwt from "jsonwebtoken";
 
 const getUsers = async (req, res) => {
   userModel.getUsers((err, users) => {
@@ -23,41 +22,30 @@ const createUsersTable = async (req, res) => {
 };
 
 const LoginUser = async (req, res) => {
-  const LoginData = {
-    email: req.body.email,
-    password: req.body.password,
-  };
+  const { email, password } = req.body;
+
   try {
-    // Get user input
-    const { email, password } = LoginData;
+    const user = await userModel.findByEmail(email);
 
-    // Validate user input
-    if (!(email && password)) {
-      res.status(400).render("pages/index", { title: "Invalid!"})
+    if (user.password !== password) {
+      return res.status(401).send('Invalid email or password');
     }
 
-    // Check if user exists
-    const { rows } = await client.query(
-      "SELECT * FROM users WHERE email = $1",
-      [email]
-    );
+    const token = jwt.sign({ email: req.body.email }, process.env.TOKEN_KEY);
+    console.log(req.session); 
+    req.session.token = token;
 
-    if (rows.length > 0 && rows[0].password === password) {
-      // Create JWT token
-      const token = jwt.sign(
-        { user_id: rows[0].id, email },
-        process.env.TOKEN_KEY,
-        {
-          expiresIn: "2h",
-        }
-      );
-
-      res.status(200).render("pages/index", { title: req.body.email });
-    } else {
-      res.status(400).render("pages/index", { title: "Invalid!"})
-    }
+    // Save the token in a cookie
+    res.cookie('token', token, {
+      httpOnly: true,
+      sameSite: 'strict',
+      maxAge: 60 * 60 * 1000, // 1 hour
+      secure: process.env.NODE_ENV === 'production'
+    });
+    return res.redirect("/dashboard");
   } catch (err) {
-    res.status(400).render("pages/index", { title: "Invalid!"})
+    console.error(err);
+    return res.render("pages/index", { title: "An error occurred" });
   }
 };
 
