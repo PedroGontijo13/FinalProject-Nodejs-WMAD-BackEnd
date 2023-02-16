@@ -9,11 +9,8 @@ const app = express()
 app.set('view engine', 'ejs');
 
 // parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json())
-
-// parse application/json
-app.use(bodyParser.json());
 
 app.use('/', indexRoute) 
 

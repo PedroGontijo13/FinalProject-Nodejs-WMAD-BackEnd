@@ -8,12 +8,19 @@ router.get("/", (req, res) => {
   res.render("pages/index", { title: "User" });
 });
 
-router.get('/form', (req, res) => {
-  res.render('pages/createUser', { title: 'Create User'})
-})
+router.get("/form", (req, res) => {
+  res.render("pages/createUser", { title: "Create User" });
+});
+
+router.get("/login", (req, res) => {
+  res.render("pages/formLoginPage", { title: "Login User" });
+});
+
+// Login user
+router.post("/login", userController.LoginUser);
 
 router.post("/", (req, res) => {
-  userController.createUser(req)
+  userController.createUser(req);
   res.render("pages/index", { title: "User" });
 });
 

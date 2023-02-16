@@ -39,6 +39,16 @@ const getUsers = (callback) => {
   });
 };
 
+const getUserByUsername = async (username) => {
+  const query = `
+    SELECT *
+    FROM users
+    WHERE username = $1
+  `;
+  const result = await pool.query(query, [username]);
+  return result.rows[0];
+};
+
 const createUser = (user, callback) => {
   const query =
     "INSERT INTO users (id, name, email, password) VALUES (DEFAULT, $1, $2, $3) RETURNING *";
@@ -53,4 +63,4 @@ const createUser = (user, callback) => {
   });
 };
 
-export default { getUsers, createUsersTable, createUser };
+export default { getUsers, createUsersTable, createUser, getUserByUsername };
