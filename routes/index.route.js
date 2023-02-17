@@ -17,4 +17,9 @@ router.get('/logout', (req, res) => {
   });
 });
 
+router.get('/api/data', (req, res) => {
+  const data = ['data1', 'data2', 'data3'];
+  res.send(data);
+});
+
 export default router;

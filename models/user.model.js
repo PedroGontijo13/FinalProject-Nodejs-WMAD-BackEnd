@@ -1,13 +1,5 @@
 import client from "../config/database.js";
 
-client.connect((err) => {
-  if (err) {
-    console.error("connection error", err.stack);
-  } else {
-    console.log("connected");
-  }
-});
-
 const createUsersTable = (callback) => {
   const query = `
       CREATE TABLE IF NOT EXISTS users (
