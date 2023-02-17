@@ -5,6 +5,7 @@ import indexRoute from "./routes/index.route.js";
 import dashboardRoutes from "./routes/dashboard.route.js";
 import session from "express-session";
 import lostpetRoute from './routes/lostpets.route.js'
+import foundpetRoute from './routes/foundpets.route.js'
 
 const app = express();
 
@@ -36,6 +37,8 @@ app.use("/", indexRoute);
 app.use("/dashboard", dashboardRoutes);
 
 app.use('/lostpet', lostpetRoute)
+
+app.use('/foundpet', foundpetRoute)
 
 //User router
 app.use("/user", UserRoute);
