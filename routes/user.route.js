@@ -22,8 +22,7 @@ router.post("/login", (req, res) => {
 });
 
 router.post("/", (req, res) => {
-  userController.createUser(req);
-  res.render("pages/index", { title: "User" });
+  userController.createUser(req, res);
 });
 
 export default router;

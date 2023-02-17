@@ -62,8 +62,10 @@ const createUser = async (req, res) => {
   userModel.createUser(newUser, (err, user) => {
     if (err) {
       console.log(err);
+      res.send(500)
     } else {
       console.log({ user });
+      res.send(user)
     }
   });
 };
